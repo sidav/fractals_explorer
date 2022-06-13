@@ -17,8 +17,7 @@ func exportToPng(useHighPrecision bool) {
 	if useHighPrecision {
 		maxSetCheckIterations = config.Export.PreciseIterations
 	}
-	fileName := fmt.Sprintf("o%d_%d_%d.png", orderOfFractalExpression, time.Now().Hour(),
-		time.Now().Minute())
+	fileName := fmt.Sprintf("o%d_%d.png", orderOfFractalExpression, time.Now().UnixNano())
 	if currentFractal == 0 {
 		fileName = "mandelbrot_" + fileName
 	}
