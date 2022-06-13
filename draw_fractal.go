@@ -5,12 +5,20 @@ import (
 	"time"
 )
 
-func drawJulia(parameter *complex) int {
+func drawFractal(parameter *complex) int {
 	startTime := time.Now()
 	for x := 0; x < RenderWidth; x++ {
 		for y := 0; y < RenderHeight; y++ {
 			complexPixel := surface.pixelToComplex(float64(x), float64(y))
-			iterations := getJuliaIterations(complexPixel, parameter)
+			var iterations int
+
+			if currentFractal == 0 {
+				iterations = getMandelbrotIterations(complexPixel)
+			}
+			if currentFractal == 1 {
+				iterations = getJuliaIterations(complexPixel, parameter)
+			}
+
 			if iterations == -1 {
 				middleware.SetColor(0, 0, 0)
 			} else {

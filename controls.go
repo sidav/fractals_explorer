@@ -100,6 +100,11 @@ func workKeys() bool { // true if redraw/recalculation needed
 		baseHue += 0.025
 		return true
 	}
+	// export image
+	if rl.IsKeyDown(rl.KeyE) {
+		exportToPng()
+		return false
+	}
 	// get new julia parameter
 	if rl.IsKeyDown(rl.KeySpace) {
 		parameter := randomComplex(-2, 2, -2, 2)

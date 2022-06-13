@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	WINDOW_W                  = 800
-	WINDOW_H                  = 600
+	WINDOW_W                  = 1920/2
+	WINDOW_H                  = 1080/2
 	PIXEL_FACTOR              = 2
 	RenderWidth, RenderHeight int
 	surface                   complexSurface
@@ -57,8 +57,8 @@ func drawCurrentFractal() {
 	textSize := int32(RenderHeight / 30)
 	rl.BeginTextureMode(middleware.TargetTexture)
 	rl.ClearBackground(rl.Black)
+	duration := drawFractal(juliaParameter)
 	if currentFractal == 0 {
-		duration := drawMandelbrot()
 		rl.DrawText(fmt.Sprintf("Mandelbrot^%d, iters %d, drawn in %dms", orderOfFractalExpression, maxSetCheckIterations, duration),
 			0, 0, textSize, color.RGBA{
 				R: 255,
@@ -67,7 +67,6 @@ func drawCurrentFractal() {
 				A: 255,
 			})
 	} else {
-		duration := drawJulia(juliaParameter)
 		rl.DrawText(fmt.Sprintf("Julia^%d, param is %s, iters %d, drawn in %dms",
 			orderOfFractalExpression, juliaParameter.toString(), maxSetCheckIterations, duration),
 
@@ -101,6 +100,7 @@ func showHelpWindow() {
 		"; and ' change resolution",
 		"- and + change zoom level",
 		"c increases base hue",
+		"e exports image to png",
 		"BACKSPACE resets the camera",
 		"TAB changes mode",
 		"SPACE generates new parameter for Julia set",

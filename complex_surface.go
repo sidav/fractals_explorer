@@ -6,9 +6,12 @@ type complexSurface struct {
 	topLeftPixelValue     complex
 	BottomRightPixelValue complex
 	horizSize, vertSize   float64
+
+	screenW, screenH int // in pixels
 }
 
 func (cs *complexSurface) init(screenW, screenH int) {
+	cs.screenW, cs.screenH = screenW, screenH
 	const baseSize = 4.0
 	var rSize, iSize float64
 	if screenW > screenH {
@@ -29,12 +32,17 @@ func (cs *complexSurface) init(screenW, screenH int) {
 	cs.refresh()
 }
 
-func (cs *complexSurface) reinit(screenW, screenH int) {
-	// save center for later recovery
-	currCenter := newComplex(
+func (cs *complexSurface) getCenter() *complex {
+	return newComplex(
 		cs.topLeftPixelValue.real+cs.horizSize/2,
 		cs.topLeftPixelValue.imaginary+cs.vertSize/2,
 	)
+}
+
+func (cs *complexSurface) reinit(screenW, screenH int) {
+	cs.screenW, cs.screenH = screenW, screenH
+	// save center for later recovery
+	currCenter := cs.getCenter()
 
 	var rSize, iSize = cs.horizSize, cs.vertSize
 	if screenW > screenH {
@@ -104,7 +112,7 @@ func (cs *complexSurface) zoomOut() {
 func (cs *complexSurface) pixelToComplex(x, y float64) *complex {
 	// pixel 0, 0 is (-2 - 2i)
 	// bottom-right pixel is 2+2i
-	verticalFactor := cs.vertSize / float64(RenderHeight)
-	horizontalFactor := cs.horizSize / float64(RenderWidth)
+	verticalFactor := cs.vertSize / float64(cs.screenH)
+	horizontalFactor := cs.horizSize / float64(cs.screenW)
 	return newComplex(cs.topLeftPixelValue.real+x*horizontalFactor, cs.topLeftPixelValue.imaginary+y*verticalFactor)
 }
