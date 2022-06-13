@@ -99,6 +99,7 @@ func showHelpWindow() {
 		", and . change calculation precision",
 		"; and ' change resolution",
 		"- and + change zoom level",
+		"c increases base hue",
 		"BACKSPACE resets the camera",
 		"TAB changes mode",
 		"SPACE generates new parameter for Julia set",

@@ -6,7 +6,6 @@ type complexSurface struct {
 	topLeftPixelValue     complex
 	BottomRightPixelValue complex
 	horizSize, vertSize   float64
-	zoomLevel             int
 }
 
 func (cs *complexSurface) init(screenW, screenH int) {
@@ -32,19 +31,16 @@ func (cs *complexSurface) init(screenW, screenH int) {
 
 func (cs *complexSurface) reinit(screenW, screenH int) {
 	// save center for later recovery
-	currCenter := [2]float64{
-		cs.topLeftPixelValue.real + cs.horizSize/2,
-		cs.topLeftPixelValue.imaginary + cs.vertSize/2,
-	}
+	currCenter := newComplex(
+		cs.topLeftPixelValue.real+cs.horizSize/2,
+		cs.topLeftPixelValue.imaginary+cs.vertSize/2,
+	)
 
-	const baseSize = 4.0
-	var rSize, iSize float64
+	var rSize, iSize = cs.horizSize, cs.vertSize
 	if screenW > screenH {
-		rSize = baseSize
-		iSize = float64(screenH) / float64(screenW) * baseSize
+		iSize = float64(screenH) / float64(screenW) * cs.horizSize
 	} else {
-		rSize = float64(screenW) / float64(screenH) * baseSize
-		iSize = baseSize
+		rSize = float64(screenW) / float64(screenH) * cs.vertSize
 	}
 	cs.topLeftPixelValue = complex{
 		real:      -rSize / 2,
@@ -55,19 +51,7 @@ func (cs *complexSurface) reinit(screenW, screenH int) {
 		imaginary: iSize / 2,
 	}
 	cs.refresh()
-
-	cs.setCenterAt(newComplex(currCenter[0], currCenter[1]))
-	if cs.zoomLevel >= 0 {
-		for i := 0; i < cs.zoomLevel; i++ {
-			cs.zoomIn()
-			cs.zoomLevel--
-		}
-	} else {
-		for i := 0; i > cs.zoomLevel; i-- {
-			cs.zoomOut()
-			cs.zoomLevel++
-		}
-	}
+	cs.setCenterAt(currCenter)
 }
 
 func (cs *complexSurface) refresh() {
@@ -103,7 +87,6 @@ func (cs *complexSurface) zoomIn() {
 	cs.topLeftPixelValue.imaginary += cs.vertSize / zoomFactor
 	cs.BottomRightPixelValue.imaginary -= cs.vertSize / zoomFactor
 
-	cs.zoomLevel++
 	cs.refresh()
 }
 
@@ -115,7 +98,6 @@ func (cs *complexSurface) zoomOut() {
 	cs.topLeftPixelValue.imaginary -= cs.vertSize / zoomFactor
 	cs.BottomRightPixelValue.imaginary += cs.vertSize / zoomFactor
 
-	cs.zoomLevel--
 	cs.refresh()
 }
 

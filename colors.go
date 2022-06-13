@@ -41,9 +41,12 @@ func HsvToRgb(h, s, v float64) (uint8, uint8, uint8) {
 	return uint8(r * 255), uint8(g * 255), uint8(b * 255)
 }
 
+var baseHue = 0.0
+
 func getSpectrumColorFor(value, min, max int) (uint8, uint8, uint8) {
 	rang := max - min
 	fraction := float64(value-min) / float64(rang)
 	// fmt.Printf("v %d in %d-%d is %f \n", value, min, max, fraction)
-	return HsvToRgb(fraction * 0.85, 1, 1)
+	fraction = baseHue + (0.85 * fraction)
+	return HsvToRgb(fraction, 1, 1)
 }

@@ -82,6 +82,10 @@ func workKeys() bool { // true if redraw/recalculation needed
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}
+	if rl.IsKeyDown(rl.KeyC) {
+		baseHue += 0.025
+		return true
+	}
 	// get new julia parameter
 	if rl.IsKeyDown(rl.KeySpace) {
 		parameter := randomComplex(-2, 2, -2, 2)
