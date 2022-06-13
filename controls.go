@@ -31,11 +31,11 @@ func workKeys() bool { // true if redraw/recalculation needed
 	}
 	// zoom "camera"
 	if rl.IsKeyDown(rl.KeyMinus) {
-		surface.zoomOut(10)
+		surface.zoomOut()
 		return true
 	}
 	if rl.IsKeyDown(rl.KeyEqual) {
-		surface.zoomIn(10)
+		surface.zoomIn()
 		return true
 	}
 	// reset "camera"
@@ -47,6 +47,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 	if rl.IsKeyDown(rl.KeyTab) {
 		surface.init(RenderWidth, RenderHeight)
 		currentFractal = (currentFractal + 1) % 2
+		time.Sleep(200 * time.Millisecond)
 		return true
 	}
 	// change iterations
@@ -98,7 +99,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 		mx, my := float64(rl.GetMouseX()), float64(rl.GetMouseY())
 		comp := surface.pixelToComplex(mx/float64(PIXEL_FACTOR), my/float64(PIXEL_FACTOR))
 		surface.setCenterAt(comp)
-		surface.zoomIn(10)
+		surface.zoomIn()
 		rl.SetMousePosition(WINDOW_W/2, int(WINDOW_H)/2)
 		return true
 	}
@@ -106,7 +107,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 		mx, my := float64(rl.GetMouseX()), float64(rl.GetMouseY())
 		comp := surface.pixelToComplex(mx/float64(PIXEL_FACTOR), my/float64(PIXEL_FACTOR))
 		surface.setCenterAt(comp)
-		surface.zoomOut(10)
+		surface.zoomOut()
 		rl.SetMousePosition(WINDOW_W/2, int(WINDOW_H)/2)
 		return true
 	}

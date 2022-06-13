@@ -87,7 +87,7 @@ func handleResize() {
 	RenderWidth = WINDOW_W / PIXEL_FACTOR
 	RenderHeight = WINDOW_H / PIXEL_FACTOR
 	middleware.SetInternalResolution(int32(RenderWidth), int32(RenderHeight))
-	surface.init(RenderWidth, RenderHeight)
+	surface.reinit(RenderWidth, RenderHeight)
 }
 
 func showHelpWindow() {
@@ -99,7 +99,9 @@ func showHelpWindow() {
 		", and . change calculation precision",
 		"; and ' change resolution",
 		"- and + change zoom level",
+		"BACKSPACE resets the camera",
 		"TAB changes mode",
+		"SPACE generates new parameter for Julia set",
 		"",
 		"Press ENTER to start exploring!",
 
