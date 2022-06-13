@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"fractals_explorer/middleware"
+	rl "github.com/gen2brain/raylib-go/raylib"
 	"image"
 	"image/color"
 	"image/png"
@@ -9,8 +11,12 @@ import (
 	"time"
 )
 
-func exportToPng() {
+func exportToPng(useHighPrecision bool) {
 	w, h := config.Export.Width, config.Export.Height
+	initialPrecision := maxSetCheckIterations
+	if useHighPrecision {
+		maxSetCheckIterations = config.Export.PreciseIterations
+	}
 	fileName := fmt.Sprintf("o%d_%d_%d.png", orderOfFractalExpression, time.Now().Hour(),
 		time.Now().Minute())
 	if currentFractal == 0 {
@@ -31,10 +37,10 @@ func exportToPng() {
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	currColor := color.RGBA{}
 
-	fmt.Println("Calculating for export...")
+	drawExportText(fmt.Sprintf("Exporting..."), 2)
+
 	var iterations int
 	for x := 0; x < w; x++ {
-		fmt.Printf(" x: %d\n", x)
 		for y := 0; y < h; y++ {
 			complexPixel := imageCmpSurf.pixelToComplex(float64(x), float64(y))
 
@@ -65,7 +71,6 @@ func exportToPng() {
 		}
 	}
 
-	fmt.Println("Exporting to file...")
 	f, err := os.Create(fileName)
 	if err != nil {
 		panic(err)
@@ -73,5 +78,24 @@ func exportToPng() {
 	defer f.Close()
 
 	png.Encode(f, img)
-	fmt.Println("Export done.")
+	if useHighPrecision {
+		maxSetCheckIterations = initialPrecision
+	}
+
+	rl.BeginTextureMode(middleware.TargetTexture)
+	drawExportText(fmt.Sprintf("Export done."), 3)
+}
+
+func drawExportText(text string, lineNum int32) {
+	textSize := int32(RenderHeight / 30)
+	rl.BeginTextureMode(middleware.TargetTexture)
+	rl.DrawText(text,
+		0, (textSize+2) * lineNum, textSize, color.RGBA{
+			R: 0,
+			G: 0,
+			B: 0,
+			A: 255,
+		})
+	rl.EndTextureMode()
+	middleware.Flush()
 }

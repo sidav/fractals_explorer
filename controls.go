@@ -102,7 +102,12 @@ func workKeys() bool { // true if redraw/recalculation needed
 	}
 	// export image
 	if rl.IsKeyDown(rl.KeyE) {
-		exportToPng()
+		exportToPng(false)
+		return false
+	}
+	// export image with high precision
+	if rl.IsKeyDown(rl.KeyR) {
+		exportToPng(true)
 		return false
 	}
 	// get new julia parameter

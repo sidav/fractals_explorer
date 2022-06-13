@@ -104,6 +104,7 @@ func showHelpWindow() {
 		"- and + change zoom level",
 		"c increases base hue",
 		"e exports image to png",
+		"r exports with high precision",
 		"BACKSPACE resets the camera",
 		"TAB changes mode",
 		"SPACE generates new parameter for Julia set",

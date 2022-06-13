@@ -9,8 +9,9 @@ import (
 
 type Config struct {
 	Export struct {
-		Width  int `yaml:"width"`
-		Height int `yaml:"height"`
+		Width             int `yaml:"width"`
+		Height            int `yaml:"height"`
+		PreciseIterations int `yaml:"iterations_for_precise_mode"`
 	} `yaml:"export"`
 }
 
@@ -21,6 +22,7 @@ func (c *Config) initFromFile() {
 		// create base config
 		c.Export.Width = 1920
 		c.Export.Height = 1080
+		c.Export.PreciseIterations = 200
 
 		file, err := os.Create("fractal_explorer_config.yaml")
 		if err != nil {
