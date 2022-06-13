@@ -1,10 +1,10 @@
 package main
 
 var maxSetCheckIterations = 20
-var order = 2
+var orderOfFractalExpression = 2
 
 func (c1 *complex) iterateAsZ(c *complex) {
-	result := sum(power(c1, order), c)
+	result := sum(power(c1, orderOfFractalExpression), c)
 	c1.setEqualTo(result)
 }
 

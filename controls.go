@@ -51,15 +51,15 @@ func workKeys() bool { // true if redraw/recalculation needed
 		return true
 	}
 	if rl.IsKeyDown(rl.KeyLeftBracket) {
-		order--
-		if order < 2 {
-			order = 2
+		orderOfFractalExpression--
+		if orderOfFractalExpression < 2 {
+			orderOfFractalExpression = 2
 		}
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}
 	if rl.IsKeyDown(rl.KeyRightBracket) {
-		order++
+		orderOfFractalExpression++
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}

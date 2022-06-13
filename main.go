@@ -59,7 +59,7 @@ func drawCurrentFractal() {
 	rl.ClearBackground(rl.Black)
 	if currentFractal == 0 {
 		duration := drawMandelbrot()
-		rl.DrawText(fmt.Sprintf("Mandelbrot set, iters %d, drawn in %dms", maxSetCheckIterations, duration),
+		rl.DrawText(fmt.Sprintf("Mandelbrot^%d, iters %d, drawn in %dms", orderOfFractalExpression, maxSetCheckIterations, duration),
 			0, 0, textSize, color.RGBA{
 				R: 255,
 				G: 255,
@@ -68,8 +68,8 @@ func drawCurrentFractal() {
 			})
 	} else {
 		duration := drawJulia(juliaParameter)
-		rl.DrawText(fmt.Sprintf("Julia set, param is %s, iters %d, drawn in %dms",
-			juliaParameter.toString(), maxSetCheckIterations, duration),
+		rl.DrawText(fmt.Sprintf("Julia^%d, param is %s, iters %d, drawn in %dms",
+			orderOfFractalExpression, juliaParameter.toString(), maxSetCheckIterations, duration),
 
 			0, 0, textSize, color.RGBA{
 				R: 255,
