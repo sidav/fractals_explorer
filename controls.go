@@ -90,6 +90,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 			parameter = randomComplex(-2, 2, -2, 2)
 			juliaParameter.setEqualTo(parameter)
 		}
+		surface.init(RenderWidth, RenderHeight)
 		time.Sleep(100 * time.Millisecond)
 		return true
 	}
