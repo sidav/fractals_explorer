@@ -50,6 +50,19 @@ func workKeys() bool { // true if redraw/recalculation needed
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}
+	if rl.IsKeyDown(rl.KeyLeftBracket) {
+		order--
+		if order < 2 {
+			order = 2
+		}
+		time.Sleep(200 * time.Millisecond)
+		return true
+	}
+	if rl.IsKeyDown(rl.KeyRightBracket) {
+		order++
+		time.Sleep(200 * time.Millisecond)
+		return true
+	}
 	// change iterations
 	if rl.IsKeyDown(rl.KeyComma) {
 		maxSetCheckIterations--
@@ -82,6 +95,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}
+	// change hue
 	if rl.IsKeyDown(rl.KeyC) {
 		baseHue += 0.025
 		return true

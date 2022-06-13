@@ -34,6 +34,18 @@ func multiply(a, b *complex) *complex {
 	}
 }
 
+func power(a *complex, p int) *complex {
+	result := &complex{}
+	result.setEqualTo(a)
+	for i := 0; i < p-1; i++ {
+		newReal := result.real*a.real - result.imaginary*a.imaginary
+		newImaginary := result.imaginary*a.real + result.real*a.imaginary
+		result.real = newReal
+		result.imaginary = newImaginary
+	}
+	return result
+}
+
 func sum(a, b *complex) *complex {
 	return &complex{
 		real:      a.real+b.real,

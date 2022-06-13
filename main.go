@@ -96,6 +96,7 @@ func showHelpWindow() {
 		"by sidav, 2022",
 		"",
 		"Arrows move the camera.",
+		"[ and ] change fractal order",
 		", and . change calculation precision",
 		"; and ' change resolution",
 		"- and + change zoom level",

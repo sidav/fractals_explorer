@@ -1,9 +1,10 @@
 package main
 
 var maxSetCheckIterations = 20
+var order = 2
 
 func (c1 *complex) iterateAsZ(c *complex) {
-	result := sum(multiply(c1, c1), c)
+	result := sum(power(c1, order), c)
 	c1.setEqualTo(result)
 }
 
