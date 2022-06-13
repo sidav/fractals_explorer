@@ -14,7 +14,7 @@ func (cs *complexSurface) init(screenW, screenH int) {
 	cs.screenW, cs.screenH = screenW, screenH
 	const baseSize = 4.0
 	var rSize, iSize float64
-	if screenW > screenH {
+	if screenW >= screenH {
 		rSize = baseSize
 		iSize = float64(screenH) / float64(screenW) * baseSize
 	} else {
@@ -45,7 +45,7 @@ func (cs *complexSurface) reinit(screenW, screenH int) {
 	currCenter := cs.getCenter()
 
 	var rSize, iSize = cs.horizSize, cs.vertSize
-	if screenW > screenH {
+	if screenW >= screenH {
 		iSize = float64(screenH) / float64(screenW) * cs.horizSize
 	} else {
 		rSize = float64(screenW) / float64(screenH) * cs.vertSize

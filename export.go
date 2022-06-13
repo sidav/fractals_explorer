@@ -10,7 +10,7 @@ import (
 )
 
 func exportToPng() {
-	w, h := 1920, 1080
+	w, h := config.Export.Width, config.Export.Height
 	fileName := fmt.Sprintf("o%d_%d_%d.png", orderOfFractalExpression, time.Now().Hour(),
 		time.Now().Minute())
 	if currentFractal == 0 {

@@ -10,14 +10,15 @@ import (
 )
 
 var (
-	WINDOW_W                  = 1920/2
-	WINDOW_H                  = 1080/2
+	WINDOW_W                  = 1920 / 2
+	WINDOW_H                  = 1080 / 2
 	PIXEL_FACTOR              = 2
 	RenderWidth, RenderHeight int
 	surface                   complexSurface
 	juliaParameter            *complex
 	currentFractal            int // 0 is Mandelbrot, 1 is Julia
 	exit                      bool
+	config                    Config
 )
 
 func main() {
@@ -32,6 +33,8 @@ func main() {
 	middleware.FillRect(0, 0, RenderWidth, RenderHeight)
 
 	rand.Seed(time.Now().UnixNano())
+
+	config.initFromFile()
 
 	showHelpWindow()
 
@@ -90,7 +93,7 @@ func handleResize() {
 }
 
 func showHelpWindow() {
-	lines := []string {
+	lines := []string{
 		"FRACTALS EXPLORER",
 		"by sidav, 2022",
 		"",
@@ -106,7 +109,6 @@ func showHelpWindow() {
 		"SPACE generates new parameter for Julia set",
 		"",
 		"Press ENTER to start exploring!",
-
 	}
 
 	rl.BeginTextureMode(middleware.TargetTexture)
@@ -114,7 +116,7 @@ func showHelpWindow() {
 
 	textSize := int32(RenderHeight / 20)
 	for i := range lines {
-		rl.DrawText(lines[i], 0, int32(i) * (textSize+1), textSize, color.RGBA{
+		rl.DrawText(lines[i], 0, int32(i)*(textSize+1), textSize, color.RGBA{
 			R: 160,
 			G: 64,
 			B: 128,
