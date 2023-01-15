@@ -57,13 +57,13 @@ func main() {
 }
 
 func drawCurrentFractal() {
-	textSize := int32(RenderHeight / 30)
+	textSize := int32(6) // int32(RenderHeight / 40)
 	rl.BeginTextureMode(middleware.TargetTexture)
 	rl.ClearBackground(rl.Black)
 	duration := drawFractal(juliaParameter)
 	if currentFractal == 0 {
 		rl.DrawText(fmt.Sprintf("Mandelbrot^%d, iters %d, drawn in %dms", orderOfFractalExpression, maxSetCheckIterations, duration),
-			0, 0, textSize, color.RGBA{
+			0, textSize+2, textSize, color.RGBA{
 				R: 255,
 				G: 255,
 				B: 255,
@@ -73,13 +73,26 @@ func drawCurrentFractal() {
 		rl.DrawText(fmt.Sprintf("Julia^%d, param is %s, iters %d, drawn in %dms",
 			orderOfFractalExpression, juliaParameter.toString(), maxSetCheckIterations, duration),
 
-			0, 0, textSize, color.RGBA{
+			0, textSize+2, textSize, color.RGBA{
 				R: 255,
 				G: 255,
 				B: 255,
 				A: 255,
 			})
 	}
+	rl.DrawText(surface.topLeftPixelValue.toString(), 0, 0, textSize, color.RGBA{
+		R: 255,
+		G: 255,
+		B: 255,
+		A: 255,
+	})
+	rl.DrawText(surface.BottomRightPixelValue.toString(), middleware.TargetTexture.Texture.Width-14*textSize,
+		middleware.TargetTexture.Texture.Height-(3*textSize/2), textSize, color.RGBA{
+			R: 255,
+			G: 255,
+			B: 255,
+			A: 255,
+		})
 	rl.EndTextureMode()
 	middleware.Flush()
 }

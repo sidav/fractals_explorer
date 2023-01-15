@@ -3,7 +3,6 @@ package main
 import (
 	"fractals_explorer/middleware"
 	rl "github.com/gen2brain/raylib-go/raylib"
-	"math/rand"
 	"time"
 )
 
@@ -66,7 +65,11 @@ func workKeys() bool { // true if redraw/recalculation needed
 	}
 	// change iterations
 	if rl.IsKeyDown(rl.KeyComma) {
-		maxSetCheckIterations--
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			maxSetCheckIterations -= 5
+		} else {
+			maxSetCheckIterations--
+		}
 		if maxSetCheckIterations < 1 {
 			maxSetCheckIterations = 1
 			return false
@@ -74,12 +77,20 @@ func workKeys() bool { // true if redraw/recalculation needed
 		return true
 	}
 	if rl.IsKeyDown(rl.KeyPeriod) {
-		maxSetCheckIterations++
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			maxSetCheckIterations += 5
+		} else {
+			maxSetCheckIterations++
+		}
 		return true
 	}
 	// handle resolution
 	if rl.IsKeyDown(rl.KeySemicolon) {
-		PIXEL_FACTOR -= 1
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			PIXEL_FACTOR -= 2
+		} else {
+			PIXEL_FACTOR -= 1
+		}
 		if PIXEL_FACTOR < 1 {
 			PIXEL_FACTOR = 1
 		}
@@ -88,7 +99,11 @@ func workKeys() bool { // true if redraw/recalculation needed
 		return true
 	}
 	if rl.IsKeyDown(rl.KeyApostrophe) {
-		PIXEL_FACTOR += 1
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			PIXEL_FACTOR += 2
+		} else {
+			PIXEL_FACTOR += 1
+		}
 		//if PIXEL_FACTOR < 1 {
 		//	PIXEL_FACTOR = 1
 		//}
@@ -103,22 +118,12 @@ func workKeys() bool { // true if redraw/recalculation needed
 	}
 	// export image
 	if rl.IsKeyDown(rl.KeyE) {
-		exportToPng(false)
-		return false
-	}
-	// export image with high precision
-	if rl.IsKeyDown(rl.KeyR) {
-		exportToPng(true)
+		exportToPng(rl.IsKeyDown(rl.KeyLeftShift))
 		return false
 	}
 	// get new julia parameter
 	if rl.IsKeyDown(rl.KeySpace) {
-		parameter := randomComplex(-2, 2, -2, 2)
-		juliaParameter.setEqualTo(parameter)
-		for !isPartOfMandelbrotForPrecision(parameter, rand.Intn(50)+1) {
-			parameter = randomComplex(-2, 2, -2, 2)
-			juliaParameter.setEqualTo(parameter)
-		}
+		generateNewJuliaParameter()
 		surface.init(RenderWidth, RenderHeight)
 		time.Sleep(100 * time.Millisecond)
 		return true
@@ -129,7 +134,13 @@ func workKeys() bool { // true if redraw/recalculation needed
 		mx, my := float64(rl.GetMouseX()), float64(rl.GetMouseY())
 		comp := surface.pixelToComplex(mx/float64(PIXEL_FACTOR), my/float64(PIXEL_FACTOR))
 		surface.setCenterAt(comp)
-		surface.zoomIn()
+		zoomTimes := 1
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			zoomTimes = 5
+		}
+		for i := 0; i < zoomTimes; i++ {
+			surface.zoomIn()
+		}
 		rl.SetMousePosition(WINDOW_W/2, int(WINDOW_H)/2)
 		return true
 	}
@@ -137,7 +148,13 @@ func workKeys() bool { // true if redraw/recalculation needed
 		mx, my := float64(rl.GetMouseX()), float64(rl.GetMouseY())
 		comp := surface.pixelToComplex(mx/float64(PIXEL_FACTOR), my/float64(PIXEL_FACTOR))
 		surface.setCenterAt(comp)
-		surface.zoomOut()
+		zoomTimes := 1
+		if rl.IsKeyDown(rl.KeyLeftShift) {
+			zoomTimes = 5
+		}
+		for i := 0; i < zoomTimes; i++ {
+			surface.zoomOut()
+		}
 		rl.SetMousePosition(WINDOW_W/2, int(WINDOW_H)/2)
 		return true
 	}

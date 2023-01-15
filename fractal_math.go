@@ -1,5 +1,7 @@
 package main
 
+import "math/rand"
+
 var maxSetCheckIterations = 20
 var orderOfFractalExpression = 2
 
@@ -47,4 +49,13 @@ func isPartOfJulia(candidate, parameter *complex) bool {
 
 func getJuliaIterations(candidate, parameter *complex) int {
 	return recurrentIterationsBeforeBlowingUp(candidate, parameter)
+}
+
+func generateNewJuliaParameter() {
+	parameter := randomComplex(-2, 0.6, -1.5, 1.5)
+	juliaParameter.setEqualTo(parameter)
+	for !isPartOfMandelbrotForPrecision(parameter, rand.Intn(500)+5) {
+		parameter = randomComplex(-2, 0.6, -1.5, 1.5)
+		juliaParameter.setEqualTo(parameter)
+	}
 }
