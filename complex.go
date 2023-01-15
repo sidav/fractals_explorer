@@ -30,17 +30,24 @@ func (c *complex) setEqualTo(c2 *complex) {
 	c.imaginary.Copy(c2.imaginary)
 }
 
+func (c *complex) incrementBy(c2 *complex) {
+	c.real.Add(c.real, c2.real)
+	c.imaginary.Add(c.imaginary, c2.imaginary)
+}
+
 func multiply(a, b *complex) *complex {
 	// (a + bi) * (c + di) = ac + bci + adi + bdii = ac + bci + adi - bd = (ac - bd) + (bc+ad)i
 	result := newComplex(0, 0)
-	left := newComplex(0, 0)
 	right := newComplex(0, 0)
-	left.real.Mul(a.real, b.real)
+
+	result.real.Mul(a.real, b.real)
+	result.imaginary.Mul(a.imaginary, b.real)
+
 	right.real.Mul(a.imaginary, b.imaginary)
-	left.imaginary.Mul(a.imaginary, b.real)
 	right.imaginary.Mul(a.real, b.imaginary)
-	result.real.Sub(left.real, right.real)
-	result.imaginary.Add(left.imaginary, right.imaginary)
+
+	result.real.Sub(result.real, right.real)
+	result.imaginary.Add(result.imaginary, right.imaginary)
 	//return &complex{
 	//	real:      a.real*b.real - a.imaginary*b.imaginary,
 	//	imaginary: a.imaginary*b.real + a.real*b.imaginary,
@@ -54,6 +61,17 @@ func power(a *complex, p int) *complex {
 	for i := 0; i < p-1; i++ {
 		result = multiply(result, a)
 	}
+	return result
+}
+
+func powerAndSum(a *complex, p int, b *complex) *complex {
+	result := newComplex(0, 0)
+	result.setEqualTo(a)
+	for i := 0; i < p-1; i++ {
+		result = multiply(result, a)
+	}
+	result.real.Add(result.real, b.real)
+	result.imaginary.Add(result.imaginary, b.imaginary)
 	return result
 }
 
@@ -79,20 +97,12 @@ func subFloat(a *complex, bReal, bIm float64) *complex {
 	return sub(a, newComplex(bReal, bIm))
 }
 
-func mulFloat(a *complex, bReal, bIm float64) *complex {
-	return multiply(a, newComplex(bReal, bIm))
-}
-
 func (c *complex) toString() string {
 	return fmt.Sprintf("(%.4f + %.4fi)", c.real, c.imaginary)
 }
 
 func (c *complex) squareMagnitude() float64 {
-	result := newComplex(0, 0)
-	result.real.Mul(c.real, c.real)
-	result.imaginary.Mul(c.imaginary, c.imaginary)
-	ret := big.NewFloat(0)
-	ret.Add(result.real, result.imaginary)
-	floatRes, _ := ret.Float64()
-	return floatRes // c.real*c.real + c.imaginary*c.imaginary
+	r, _ := c.real.Float64()
+	i, _ := c.imaginary.Float64()
+	return r*r + i*i // c.real*c.real + c.imaginary*c.imaginary
 }
