@@ -1,11 +1,19 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 var maxSetCheckIterations = 20
 var orderOfFractalExpression = 2
 
 func (c1 *complex) iterateAsZ(c *complex) {
+	// // uncomment for tricorn set:
+	// c1.imaginary = -c1.imaginary
+	// // uncomment for "burning ship" set
+	//c1.real = math.Abs(c1.real)
+	//c1.imaginary = math.Abs(c1.imaginary)
+
 	result := sum(power(c1, orderOfFractalExpression), c)
 	c1.setEqualTo(result)
 }
