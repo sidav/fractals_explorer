@@ -1,8 +1,9 @@
 package main
 
 import (
-	rl "github.com/gen2brain/raylib-go/raylib"
 	"fractals_explorer/middleware"
+	rl "github.com/gen2brain/raylib-go/raylib"
+	"math/rand"
 	"time"
 )
 
@@ -114,7 +115,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 	if rl.IsKeyDown(rl.KeySpace) {
 		parameter := randomComplex(-2, 2, -2, 2)
 		juliaParameter.setEqualTo(parameter)
-		for !isPartOfMandelbrot(parameter) {
+		for !isPartOfMandelbrotForPrecision(parameter, rand.Intn(50)+1) {
 			parameter = randomComplex(-2, 2, -2, 2)
 			juliaParameter.setEqualTo(parameter)
 		}

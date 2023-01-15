@@ -28,8 +28,13 @@ func recurrentIterationsBeforeBlowingUp(z, c *complex) int {
 	return -1 // not blowing up
 }
 
-func isPartOfMandelbrot(c *complex) bool {
-	return recurrentIterationsBeforeBlowingUp(newComplex(0, 0), c) < maxSetCheckIterations
+func isPartOfMandelbrotForPrecision(c *complex, precision int) bool {
+	t := maxSetCheckIterations
+	maxSetCheckIterations = precision + 2
+	iters := recurrentIterationsBeforeBlowingUp(newComplex(0, 0), c)
+	// fmt.Printf("Current iters: %d", iters)
+	maxSetCheckIterations = t
+	return iters >= precision
 }
 
 func getMandelbrotIterations(c *complex) int {
@@ -43,4 +48,3 @@ func isPartOfJulia(candidate, parameter *complex) bool {
 func getJuliaIterations(candidate, parameter *complex) int {
 	return recurrentIterationsBeforeBlowingUp(candidate, parameter)
 }
-
