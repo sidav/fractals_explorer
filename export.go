@@ -17,12 +17,15 @@ func exportToPng(useHighPrecision bool) {
 	if useHighPrecision {
 		maxSetCheckIterations = config.Export.PreciseIterations
 	}
-	fileName := fmt.Sprintf("o%d_%d.png", orderOfFractalExpression, time.Now().UnixNano())
-	if currentFractal == 0 {
+	fileName := fmt.Sprintf("o%d_%s.png", orderOfFractalExpression, time.Now().Format("2006_01_02_15_04_05"))
+
+	switch currentFractal {
+	case 0:
 		fileName = "mandelbrot_" + fileName
-	}
-	if currentFractal == 1 {
+	case 1:
 		fileName = "julia_" + fileName
+	default:
+		panic("unknown fractal type")
 	}
 
 	imageCmpSurf := &complexSurface{
@@ -36,11 +39,22 @@ func exportToPng(useHighPrecision bool) {
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	currColor := color.RGBA{}
 
-	drawExportText(fmt.Sprintf("Exporting..."), 2)
+	drawExportText(fmt.Sprintf("Exporting... Please don't press any keys"), 0)
+	drawExportText(fmt.Sprintf("Calculating %dx%d picture with %d precision", w, h, maxSetCheckIterations), 1)
 
 	var iterations int
+	totalPixels := w * h
+	prevPercent := 0
+	currPixel := 0
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
+			currPixel++
+			currentPercent := 100 * currPixel / totalPixels
+			if currentPercent != prevPercent {
+				drawExportText(fmt.Sprintf("Calculating: %d%%\n", currentPercent), 2)
+				prevPercent = currentPercent
+			}
+
 			complexPixel := imageCmpSurf.pixelToComplex(float64(x), float64(y))
 
 			if currentFractal == 0 {
@@ -69,7 +83,7 @@ func exportToPng(useHighPrecision bool) {
 			img.Set(x, y, currColor)
 		}
 	}
-
+	drawExportText(fmt.Sprintf("Saving output file."), 3)
 	f, err := os.Create(fileName)
 	if err != nil {
 		panic(err)
@@ -82,17 +96,19 @@ func exportToPng(useHighPrecision bool) {
 	}
 
 	rl.BeginTextureMode(middleware.TargetTexture)
-	drawExportText(fmt.Sprintf("Export done."), 3)
+	drawExportText(fmt.Sprintf("Saved to %s", fileName), 0)
+	drawExportText(fmt.Sprintf("Export completed."), 4)
 }
 
 func drawExportText(text string, lineNum int32) {
-	textSize := int32(RenderHeight / 30)
+	textSize := int32(RenderHeight / 20)
 	rl.BeginTextureMode(middleware.TargetTexture)
+	rl.DrawRectangle(0, lineNum*(textSize+2), rl.MeasureText(text, textSize+1), textSize+2, rl.Black)
 	rl.DrawText(text,
-		0, (textSize+2) * lineNum, textSize, color.RGBA{
-			R: 0,
-			G: 0,
-			B: 0,
+		0, (textSize+2)*lineNum, textSize, color.RGBA{
+			R: 255,
+			G: 255,
+			B: 255,
 			A: 255,
 		})
 	rl.EndTextureMode()
