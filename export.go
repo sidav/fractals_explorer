@@ -19,14 +19,7 @@ func exportToPng(useHighPrecision bool) {
 	}
 	fileName := fmt.Sprintf("o%d_%s.png", orderOfFractalExpression, time.Now().Format("2006_01_02_15_04_05"))
 
-	switch currentFractal {
-	case 0:
-		fileName = "mandelbrot_" + fileName
-	case 1:
-		fileName = "julia_" + fileName
-	default:
-		panic("unknown fractal type")
-	}
+	fileName = getCurrFractalNameString() + "_" + fileName
 
 	imageCmpSurf := &complexSurface{
 		topLeftPixelValue:     surface.topLeftPixelValue,
@@ -57,12 +50,7 @@ func exportToPng(useHighPrecision bool) {
 
 			complexPixel := imageCmpSurf.pixelToComplex(float64(x), float64(y))
 
-			if currentFractal == 0 {
-				iterations = getMandelbrotIterations(complexPixel)
-			}
-			if currentFractal == 1 {
-				iterations = getJuliaIterations(complexPixel, juliaParameter)
-			}
+			iterations = getIterationsForCurrentFractalType(complexPixel, juliaParameter)
 
 			if iterations == -1 {
 				currColor = color.RGBA{

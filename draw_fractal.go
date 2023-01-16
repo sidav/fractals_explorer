@@ -12,12 +12,7 @@ func drawFractal(parameter *complex) int {
 			complexPixel := surface.pixelToComplex(float64(x), float64(y))
 			var iterations int
 
-			if currentFractal == 0 {
-				iterations = getMandelbrotIterations(complexPixel)
-			}
-			if currentFractal == 1 {
-				iterations = getJuliaIterations(complexPixel, parameter)
-			}
+			iterations = getIterationsForCurrentFractalType(complexPixel, parameter)
 
 			if iterations == -1 {
 				middleware.SetColor(0, 0, 0)

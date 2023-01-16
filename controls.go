@@ -46,7 +46,7 @@ func workKeys() bool { // true if redraw/recalculation needed
 	// change fractal
 	if rl.IsKeyDown(rl.KeyTab) {
 		surface.init(RenderWidth, RenderHeight)
-		currentFractal = (currentFractal + 1) % 2
+		currentFractal = (currentFractal + 1) % TOTAL_FRACTALS
 		time.Sleep(200 * time.Millisecond)
 		return true
 	}

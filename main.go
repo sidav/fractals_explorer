@@ -16,7 +16,7 @@ var (
 	RenderWidth, RenderHeight int
 	surface                   complexSurface
 	juliaParameter            *complex
-	currentFractal            int // 0 is Mandelbrot, 1 is Julia
+	currentFractal            fractalType
 	exit                      bool
 	config                    Config
 )
@@ -61,25 +61,13 @@ func drawCurrentFractal() {
 	rl.BeginTextureMode(middleware.TargetTexture)
 	rl.ClearBackground(rl.Black)
 	duration := drawFractal(juliaParameter)
-	if currentFractal == 0 {
-		rl.DrawText(fmt.Sprintf("Mandelbrot^%d, iters %d, drawn in %dms", orderOfFractalExpression, maxSetCheckIterations, duration),
-			0, textSize+2, textSize, color.RGBA{
-				R: 255,
-				G: 255,
-				B: 255,
-				A: 255,
-			})
-	} else {
-		rl.DrawText(fmt.Sprintf("Julia^%d, param is %s, iters %d, drawn in %dms",
-			orderOfFractalExpression, juliaParameter.toString(), maxSetCheckIterations, duration),
-
-			0, textSize+2, textSize, color.RGBA{
-				R: 255,
-				G: 255,
-				B: 255,
-				A: 255,
-			})
-	}
+	rl.DrawText(fmt.Sprintf("%s^%d, iters %d, drawn in %dms", getCurrFractalNameString(), orderOfFractalExpression, maxSetCheckIterations, duration),
+		0, textSize+2, textSize, color.RGBA{
+			R: 255,
+			G: 255,
+			B: 255,
+			A: 255,
+		})
 	rl.DrawText(surface.topLeftPixelValue.toString(), 0, 0, textSize, color.RGBA{
 		R: 255,
 		G: 255,
@@ -87,6 +75,14 @@ func drawCurrentFractal() {
 		A: 255,
 	})
 	rl.DrawText(surface.BottomRightPixelValue.toString(), middleware.TargetTexture.Texture.Width-14*textSize,
+		middleware.TargetTexture.Texture.Height-(3*textSize/2), textSize, color.RGBA{
+			R: 255,
+			G: 255,
+			B: 255,
+			A: 255,
+		})
+	realWidth := surface.BottomRightPixelValue.real - surface.topLeftPixelValue.real
+	rl.DrawText(fmt.Sprintf("Real width of the screen: %e", realWidth), 0,
 		middleware.TargetTexture.Texture.Height-(3*textSize/2), textSize, color.RGBA{
 			R: 255,
 			G: 255,

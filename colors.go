@@ -46,7 +46,8 @@ var baseHue = 0.0
 func getSpectrumColorFor(value, min, max int) (uint8, uint8, uint8) {
 	rang := max - min
 	fraction := float64(value-min) / float64(rang)
+	fraction *= 1.68803398875 // golden ratio
 	// fmt.Printf("v %d in %d-%d is %f \n", value, min, max, fraction)
-	fraction = baseHue + (0.85 * fraction)
-	return HsvToRgb(fraction, 1, 1)
+	fraction = baseHue + (fraction)
+	return HsvToRgb(fraction, 0.88, 0.85)
 }
